@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>
+            Chat
+        </title>
+        <link rel="stylesheet"  href="/stylesheets/styles.css"  type="text/css"/>
+        <style>
+            /* * { margin: 0; padding: 0; box-sizing: border-box; }
+            body { font: 13px Helvetica, Arial; }
+            form { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; }
+            form input { border: 0; padding: 10px; width: 90%; margin-right: 0.5%; }
+            form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
+            #messages { list-style-type: none; margin: 0; padding: 0; }
+            #messages li { padding: 5px 10px; }
+            #messages li:nth-child(odd) { background: #eee; } */
+        </style>
+    </head>
+    <body>
+         <!-- <ul id="messages"></ul> -->
+        <!-- <form action="">
+          <input id="m" autocomplete="off"   /><button>Send</button>
+        </form> -->
+        <div id="content">
+            <div id="room"></div>
+            <div id="room-list"></div>
+            <div id="messages"></div>
+            <form id="send-from" action="">
+                <input id="send-message" type="text"/>
+                <input id="send-button" type="submit"  value="SEND"/> 
+                <!-- type="submit"按钮没反应    <button>Send</button> -->
+                <div id="help">
+                    Chat commands:
+                    <ul>
+                        <li>Change nickname: <code>/nick[username]</code></li>
+                        <li>Join/create room:<code>/join [room name]</code></li>
+                    </ul>
+                </div>
+            </form>
+        </div> 
+       
+        <!-- /socket.io/socket.io.js -->
+        <!-- /socket.io-client/dist/socket.io.js -->
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+        <script src="/javascripts/chat.js" type="text/javascript"></script>
+        <script src="/javascripts/chat_ui.js" type="text/javascript"></script>
+        <!-- <script>
+            $(function () {
+            var socket = io();
+            $('form').submit(function(e) {
+                e.preventDefault(); // prevents page reloading
+                console.log('111', $('#m').val())
+                socket.emit('chat message', $('#m').val());
+                $('#m').val('');
+                return false;
+            });
+            });
+        </script> -->
+       
+       
+    </body>
+</html>
