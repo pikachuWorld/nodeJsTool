@@ -84,7 +84,8 @@ io.on('connection', (socket) => {
   });
 // console.log('--@@@@@@99-Server--', chatServer.listen)
 chatServer.listen(server);
+
 //启动http服务器
-server.listen(3000, function(){
-    console.log("Server listening on port 3000.")
+server.listen(3031, function(){
+    console.log("Server listening on port 3031.")
 })

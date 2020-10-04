@@ -38,6 +38,7 @@ function processUserInput(chatApp, socket){
 var socket = io.connect();
 
 $(document).ready(function(){
+    console.log("###chat##", Chat)
     var chatApp = new Chat(socket);
 
     // //显示更名尝试的结果

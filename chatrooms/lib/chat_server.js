@@ -48,7 +48,7 @@ function assignGuestName(socket, guestNumber, nickNames, namesUsed){
 
     //生成新的昵称
     var name = 'Guest' + guestNumber;
-    console.log('@@@11分配用户昵称>', 'guestNumber--->', guestNumber, 'nickNames-->', nickNames, 'namesUsed--->', namesUsed)
+    // console.log('@@@11分配用户昵称>', 'guestNumber--->', guestNumber)
    
     //把用户的昵称跟客户端连接ID关联上
     nickNames[socket.id] = name;
@@ -59,41 +59,42 @@ function assignGuestName(socket, guestNumber, nickNames, namesUsed){
     });
     //存放已被占用的昵称
     namesUsed.push(name);
-    console.log('@@@@33配用户昵称>-->name', name, 'nickName--->', nickNames, 'namesUsed-->', namesUsed)
+    // console.log('@@@@33配用户昵称>-->name', name, 'nickName--->', nickNames, 'namesUsed-->', namesUsed)
     //增加用来生产昵称的计数器
     return guestNumber + 1;
 }
 
 //进入聊天室相关的逻辑
 function joinRoom(socket, room){
-    console.log('**joinRoom---进入聊天室相关的逻辑socket-**room--->', room)
+    // console.log('**joinRoom---进入聊天室相关的逻辑socket-**room--->', room)
    
     //让用户进入房间
     socket.join(room);
    
     //记录用户的当前房间
     currentRoom[socket.id] = room;
-    console.log('-- currentRoom-->',  currentRoom)
+    // console.log('**currentRoom-->',  currentRoom)
     //让用户知道他们进入了新的房间
   
     socket.emit('joinResult',{room: room});
     
     //让房间里的其他用户知道有新用户进入了房间
     socket.broadcast.to(room).emit('message',{
-        text:nickNames[socket.id] + 'has joined' + room +'.'
+        text:  nickNames[socket.id] + 'has joined' + room +'.'
     });
-    console.log("room55")
+    // console.log("room55")
   
     //确定有哪些用户在这个房间里
     // var usersInRoom = io.sockets.clients(room);  // 旧版吧
     let usersInRoom = io.sockets.adapter.rooms[room];  //正确写法
-    console.log('**joinRoom--usersInRoom-', usersInRoom)
+    // console.log('**joinRoom--usersInRoom-', usersInRoom)
   
     //如果不止一个用户在这个房间里，汇总下有哪些用户
     if(!usersInRoom) return false;
     if(usersInRoom.length > 1){
-        var usersInRoomSummary = 'Userd currently in ' + room + ':';
-        for(var index in userdInRoom){
+        var usersInRoomSummary = 'Users currently in ' + room + ':';
+        // console.log("**888usersInRoomSummary", usersInRoomSummary)
+        for(var index in usersInRoom){
             var userSocketId = usersInRoom[index].id;
             if(userSocketId != socket.id){
                 if(index > 0){
@@ -106,7 +107,7 @@ function joinRoom(socket, room){
         //将房间里其他用户的汇总发送给这个用户
         socket.emit('message', {text:usersInRoomSummary});
     }
-    console.log("room77")
+    // console.log("room77")
 }
 //更名请求的处理逻辑
 function handleNameChangeAttempts(socket, nickNames, namesUsed){
@@ -160,16 +161,19 @@ function handleMessageBroadcasting(socket){
 function handleRoomJoining(socket){
 
     socket.on('join',function(room){
-        console.log('***创建房间', room)
+        // console.log('***创建房间', room)
         socket.leave(currentRoom[socket.id]);
         joinRoom(socket, room.newRoom);
     });
 }
 //用户断开连接
 function handleClientDisconnection(socket){
+    // console.log('!!!99999!!namesUsed', namesUsed, namesUsed.length, !!namesUsed.length)
     socket.on('disconnect',function(){
         var nameIndex = namesUsed.indexOf(nickNames[socket.id]);
-        delete namesUsed(nameIndex);
+        // console.log('!!!1000!!namesUsed', nameIndex, '!!nickNames[socket.id]', nickNames, '--', socket.id,'--', nickNames[socket.id])
+
+        delete namesUsed[nameIndex];
         delete nickNames[socket.id];
     });
 }

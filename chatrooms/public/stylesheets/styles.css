@@ -27,7 +27,7 @@ input[type= "submit"]{
 }
 #messages {
     width: 540px;
-    height: 300px;
+    height: auto;
     /* overflow: auto; */
     background-color: rgb(130, 224, 255);
     margin-bottom: 1em;

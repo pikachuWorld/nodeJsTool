@@ -1,0 +1,171 @@
+
+# For more information on configuration, see:
+#   * Official English Documentation: http://nginx.org/en/docs/
+#   * Official Russian Documentation: http://nginx.org/ru/docs/
+
+user nginx;
+worker_processes auto;
+error_log /var/log/nginx/error.log;
+pid /run/nginx.pid;
+
+# Load dynamic modules. See /usr/share/doc/nginx/README.dynamic.
+include /usr/share/nginx/modules/*.conf;
+
+events {
+    worker_connections 1024;
+}
+
+http {
+    log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+                      '$status $body_bytes_sent "$http_referer" '
+                     '"$http_user_agent" "$http_x_forwarded_for"';
+
+    access_log  /var/log/nginx/access.log  main;
+
+    sendfile            on;
+    tcp_nopush          on;
+    tcp_nodelay         on;
+    keepalive_timeout   65;
+    proxy_send_timeout  65;  
+    types_hash_max_size 2048;
+
+    include             /etc/nginx/mime.types;
+    default_type        application/octet-stream;
+
+    # Load modular configuration files from the /etc/nginx/conf.d directory.
+    # See http://nginx.org/en/docs/ngx_core_module.html#include
+    # for more information.
+    include /etc/nginx/conf.d/*.conf;
+
+    server {
+        listen       80 default_server;
+        listen       [::]:80 default_server;
+        server_name  www.taolovesophia.com;
+        #把http的域名请求转成https
+        return 301 https://$host$request_uri; 
+        root         /usr/share/nginx/html;
+        # Load configuration files for the default server block.
+        include /etc/nginx/default.d/*.conf;
+
+        location / {
+          proxy_pass localhost:3000;
+          root  html;
+          index  index.html index.htm;
+          client_max_body_size  100m;
+        }
+
+        error_page 404 /404.html;
+            location = /40x.html {
+        }
+
+        error_page 500 502 503 504 /50x.html;
+            location = /50x.html {
+        }
+    }
+# Settings for a TLS enabled server.
+#
+    server {
+        listen       443 ssl http2 default_server;
+        listen       [::]:443 ssl http2 default_server;
+        server_name  www.taolovesophia.com;
+        root         /usr/share/nginx/html;
+        client_max_body_size 128M;
+        ssl_certificate "/etc/nginx/1_www.taolovesophia.com_bundle.crt";
+        ssl_certificate_key "/etc/nginx/2_www.taolovesophia.com.key";
+        ssl_session_cache shared:SSL:1m;
+        ssl_session_timeout  10m;
+        ssl_ciphers HIGH:!aNULL:!MD5;
+        ssl_prefer_server_ciphers on;
+
+        # Load configuration files for the default server block.
+        include /etc/nginx/default.d/*.conf;
+
+        location / {
+          proxy_pass localhost:3000;
+          root  html;
+          index  index.html index.htm;
+          client_max_body_size  100m;  
+        }
+        error_page 404 /404.html;
+            location = /40x.html {
+        }
+
+        error_page 500 502 503 504 /50x.html;
+            location = /50x.html {
+        }
+    }
+    
+
+}
+
+[root@VM_0_10_centos nginx]# ls
+1_www.taolovesophia.com_bundle.crt  fastcgi.conf.default    mime.types          scgi_params.default
+2_www.taolovesophia.com.key         fastcgi_params          mime.types.default  uwsgi_params
+conf.d                              fastcgi_params.default  nginx.conf          uwsgi_params.default
+default.d                           koi-utf                 nginx.conf.default  win-utf
+fastcgi.conf                        koi-win                 scgi_params         www.taolovesophia.com.csr
+[root@VM_0_10_centos nginx]# vi nginx.conf
+[root@VM_0_10_centos nginx]# vi nginx.conf.packet_write_wait: Connection to 49.232.92.12 port 59862: Broken pipe
+[17:25] sophia ~/study/2020A-project/newRedisStable/redis-stable $  ssh -p  59862  root@49.232.92.12
+root@49.232.92.12's password: 
+Last failed login: Sun Sep 20 17:27:26 CST 2020 from 43.245.185.66 on ssh:notty
+There were 39 failed login attempts since the last successful login.
+Last login: Sun Sep 20 17:12:58 2020 from 111.199.63.99
+[root@VM_0_10_centos ~]# ls
+mongodb-linux-x86_64-4.0.4.tgz.1  node-v12.16.2  node-v12.16.2.tar.gz  node-v8.9.1  node-v8.9.1.tar.gz
+[root@VM_0_10_centos ~]# cd /etc/nginx
+[root@VM_0_10_centos nginx]# ls
+1_www.taolovesophia.com_bundle.crt  fastcgi.conf.default    mime.types          scgi_params.default
+2_www.taolovesophia.com.key         fastcgi_params          mime.types.default  uwsgi_params
+conf.d                              fastcgi_params.default  nginx.conf          uwsgi_params.default
+default.d                           koi-utf                 nginx.conf.default  win-utf
+fastcgi.conf                        koi-win                 scgi_params         www.taolovesophia.com.csr
+[root@VM_0_10_centos nginx]# pwd
+/etc/nginx
+[root@VM_0_10_centos nginx]# ls
+1_www.taolovesophia.com_bundle.crt  fastcgi.conf.default    mime.types          scgi_params.default
+2_www.taolovesophia.com.key         fastcgi_params          mime.types.default  uwsgi_params
+conf.d                              fastcgi_params.default  nginx.conf          uwsgi_params.default
+default.d                           koi-utf                 nginx.conf.default  win-utf
+fastcgi.conf                        koi-win                 scgi_params         www.taolovesophia.com.csr
+[root@VM_0_10_centos nginx]# vi nginx.conf
+[root@VM_0_10_centos nginx]# vi nginx.conf.default 
+
+
+    # another virtual host using mix of IP-, name-, and port-based configuration
+    #
+    #server {
+    #    listen       8000;
+    #    listen       somename:8080;
+    #    server_name  somename  alias  another.alias;
+
+    #    location / {
+    #        root   html;
+    #        index  index.html index.htm;
+    #    }
+    #}
+
+
+    # HTTPS server
+    #
+    #server {
+    #    listen       443 ssl;
+    #    server_name  localhost;
+
+    #    ssl_certificate      cert.pem;
+    #    ssl_certificate_key  cert.key;
+
+    #    ssl_session_cache    shared:SSL:1m;
+    #    ssl_session_timeout  5m;
+
+    #    ssl_ciphers  HIGH:!aNULL:!MD5;
+    #    ssl_prefer_server_ciphers  on;
+
+    #    location / {
+    #        root   html;
+    #        index  index.html index.htm;
+    #    }
+    #}
+
+}
+
