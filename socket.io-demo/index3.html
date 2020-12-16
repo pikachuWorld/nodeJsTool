@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>发送事件(Emiting events)</title>
+    <style>
+        input{
+            width: 700px;
+            margin-bottom: 1em;
+            margin-right: 1em;
+            border: 2px solid rgb(130, 224, 255);
+            padding: 10px;
+        }
+        button{
+            width: 9%;
+            background: rgb(130, 224, 255);
+            border: none;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h3>
+        发送事件(Emiting events)
+    </h3>
+    <form action="">
+        <input type="text" id="m"/>
+        <button>send</button>
+    </form>
+    <script src="/socket.io/socket.io.js"></script>
+<script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+<script>
+  $(function () {
+    var socket = io();
+    $('form').submit(function(e){
+      e.preventDefault(); // prevents page reloading 放置页面重新加载
+      socket.emit('chat message', $('#m').val());
+      $('#m').val('');
+      return false;
+    });
+  });
+</script>
+</body>
+</html>

@@ -22,14 +22,14 @@ function send404(response){
 }
 //提供文件数据服务
 function sendFile(response, filePath, fileContents){
-    // console.log('----filePath', filePath, '22', path.basename(filePath))
+    console.log('----filePath', filePath, '22', path.basename(filePath))
     // console.log('----type',   mime.lookup(path.basename(filePath)))
     // console.log('----fileContents',   mime.lookup(path.basename(filePath)))
     response.writeHead(
         200,
         {"content-type": mime.lookup(path.basename(filePath))}
     );
-    // console.log('----fileContents', fileContents)
+    console.log('----fileContents', fileContents)
 
     response.end(fileContents);
 }
@@ -82,7 +82,7 @@ var io = require('socket.io')(server);
 io.on('connection', (socket) => {
     console.log('a user connected');
   });
-// console.log('--@@@@@@99-Server--', chatServer.listen)
+console.log('--@@@@@@99-Server--', chatServer.listen)
 chatServer.listen(server);
 
 //启动http服务器

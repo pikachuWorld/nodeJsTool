@@ -87,14 +87,15 @@ function joinRoom(socket, room){
     //确定有哪些用户在这个房间里
     // var usersInRoom = io.sockets.clients(room);  // 旧版吧
     let usersInRoom = io.sockets.adapter.rooms[room];  //正确写法
-    // console.log('**joinRoom--usersInRoom-', usersInRoom)
+    console.log('**joinRoom--usersInRoom-', usersInRoom)
   
     //如果不止一个用户在这个房间里，汇总下有哪些用户
     if(!usersInRoom) return false;
     if(usersInRoom.length > 1){
         var usersInRoomSummary = 'Users currently in ' + room + ':';
-        // console.log("**888usersInRoomSummary", usersInRoomSummary)
+        console.log("**usersInRoomSummary", usersInRoomSummary)
         for(var index in usersInRoom){
+            console.log(index, "**usersInRoom",usersInRoom)
             var userSocketId = usersInRoom[index].id;
             if(userSocketId != socket.id){
                 if(index > 0){
@@ -102,6 +103,7 @@ function joinRoom(socket, room){
                 }
                 usersInRoomSummary +=nickNames[userSocketId];
             }
+            debugger
         }
         usersInRoomSummary += '.';
         //将房间里其他用户的汇总发送给这个用户
